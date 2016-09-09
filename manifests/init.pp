@@ -37,7 +37,7 @@ define sysctl (
     # The immediate change + re-check on each run "just in case"
     exec { "sysctl-${title}":
       command => "/sbin/sysctl -w ${key}=\"${value}\"",
-      unless  => "/sbin/sysctl -n ${key} | /bin/grep -q -e '^${value}\$'",
+      unless  => "/sbin/sysctl -n ${key} | /bin/sed 's/\t/ /g' | /bin/grep -q -e '^${value}\$'",
     }
     # For the few original values from the main file
     exec { "update-sysctl.conf-${title}":
